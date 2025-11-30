@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إتمام الطلب — سوبر ماركت دوار الطيارة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+--bg:#0a0a0a;
+--card-bg:#111;
+--text:#efefef;
+--muted:#bdbdbd;
+--accent:#ffd54b;
+--accent-2:#07a77a;
+--delete-red: #f94144;
+--radius:16px;
+--shadow:0 12px 40px rgba(0,0,0,0.7);
+font-family:'Cairo',sans-serif;
+}
+body {
+margin:0;
+background:var(--bg);
+color:var(--text);
+min-height:100vh;
+font-family:'Cairo',sans-serif;
+padding:30px;
+}
+.container {
+max-width:1200px;
+margin:0 auto;
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:30px;
+}
+.header {
+grid-column:1 / -1;
+margin-bottom:20px;
+}
+.header h1 {
+margin:0 0 10px;
+font-size:2.2rem;
+background:linear-gradient(90deg,var(--accent),var(--accent-2));
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+}
+.header p {
+color:var(--muted);
+font-size:1rem;
+margin:0;
+}
+.main-section {
+display:flex;
+flex-direction:column;
+gap:25px;
+}
+.section-card {
+background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+border:1px solid rgba(255,255,255,0.03);
+border-radius:var(--radius);
+padding:25px;
+box-shadow:var(--shadow);
+}
+.section-title {
+font-size:1.4rem;
+font-weight:700;
+margin:0 0 20px;
+color:var(--accent);
+display:flex;
+align-items:center;
+gap:10px;
+}
+.section-title::before {
+content:'';
+width:4px;
+height:24px;
+background:linear-gradient(90deg,var(--accent),var(--accent-2));
+border-radius:2px;
+}
+.form-group {
+margin-bottom:20px;
+}
+.form-group label {
+display:block;
+margin-bottom:8px;
+font-weight:600;
+color:var(--text);
+font-size:1rem;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+width:100%;
+padding:12px 15px;
+border-radius:10px;
+border:1px solid rgba(255,255,255,0.1);
+background:rgba(255,255,255,0.02);
+color:var(--text);
+font-size:1rem;
+font-family:'Cairo',sans-serif;
+transition:border-color 0.3s ease,background 0.3s ease;
+box-sizing:border-box;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+outline:none;
+border-color:var(--accent);
+background:rgba(255,255,255,0.04);
+}
+.form-row {
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+.radio-group {
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+.radio-option {
+display:flex;
+align-items:center;
+padding:12px 15px;
+border-radius:10px;
+border:2px solid rgba(255,255,255,0.1);
+cursor:pointer;
+transition:all 0.3s ease;
+}
+.radio-option input[type="radio"] {
+width:20px;
+height:20px;
+margin-left:12px;
+accent-color:var(--accent);
+cursor:pointer;
+}
+.radio-option label {
+margin:0;
+font-weight:600;
+cursor:pointer;
+flex-grow:1;
+}
+.radio-option:hover {
+border-color:var(--accent);
+background:rgba(255,213,75,0.05);
+}
+.radio-option input[type="radio"]:checked + label {
+color:var(--accent);
+}
+.sidebar {
+display:flex;
+flex-direction:column;
+gap:25px;
+}
+.order-summary {
+background:linear-gradient(135deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+border:1px solid rgba(255,255,255,0.03);
+border-radius:var(--radius);
+padding:20px;
+box-shadow:var(--shadow);
+height:fit-content;
+position:sticky;
+top:30px;
+}
+.summary-title {
+font-size:1.2rem;
+font-weight:700;
+margin:0 0 15px;
+color:var(--accent);
+}
+.order-items {
+display:flex;
+flex-direction:column;
+gap:12px;
+max-height:300px;
+overflow-y:auto;
+margin-bottom:15px;
+padding-bottom:15px;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+.order-item {
+display:grid;
+grid-template-columns: 1fr auto auto;
+gap: 10px;
+align-items:center;
+padding:10px;
+background:rgba(255,255,255,0.01);
+border-radius:8px;
+font-size:0.95rem;
+}
+.item-details {
+flex-grow:1;
+display:flex;
+flex-direction:column;
+gap:3px;
+}
+.item-name {
+font-weight:600;
+color:var(--accent);
+}
+.item-qty {
+color:var(--muted);
+font-size:0.85rem;
+}
+.item-price {
+font-weight:700;
+color:var(--accent-2);
+text-align:left;
+min-width: 60px;
+}
+.delete-item-btn {
+background: none;
+border: none;
+color: var(--delete-red);
+font-weight: 700;
+font-size: 1.1rem;
+cursor: pointer;
+transition: color 0.2s ease;
+padding: 5px;
+line-height: 1;
+}
+.delete-item-btn:hover {
+color: #ff8e8e;
+transform: scale(1.1);
+}
+.order-total {
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 0;
+font-size:1.2rem;
+font-weight:700;
+margin-bottom:15px;
+}
+.total-label {
+color:var(--muted);
+}
+.total-amount {
+background:linear-gradient(90deg,var(--accent),var(--accent-2));
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+background-clip:text;
+}
+.submit-btn {
+width:100%;
+padding:15px;
+border-radius:999px;
+border:none;
+background:linear-gradient(90deg,var(--accent),var(--accent-2));
+color:#051018;
+font-size:1.1rem;
+font-weight:700;
+cursor:pointer;
+transition:transform 0.2s ease,box-shadow 0.2s ease;
+}
+.submit-btn:hover {
+transform:translateY(-2px);
+box-shadow:0 12px 30px rgba(7,167,122,0.3);
+}
+.submit-btn:disabled {
+opacity:0.5;
+cursor:not-allowed;
+transform:none;
+}
+.error-msg {
+color:#f94144;
+font-size:0.9rem;
+margin-top:5px;
+}
+.success-msg {
+color:var(--accent-2);
+background:rgba(7,167,122,0.1);
+border-left:3px solid var(--accent-2);
+padding:12px 15px;
+border-radius:6px;
+margin-bottom:20px;
+}
+@media(max-width:900px) {
+.container {
+grid-template-columns:1fr;
+}
+.form-row {
+grid-template-columns:1fr;
+}
+.order-summary {
+position:static;
+}
+}
+.back-btn {
+background:rgba(255,255,255,0.1);
+color:var(--accent);
+padding:10px 20px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:1rem;
+font-weight:600;
+transition:background 0.3s ease;
+font-family:'Cairo',sans-serif;
+margin-bottom:20px;
+}
+.back-btn:hover {
+background:rgba(255,255,255,0.15);
+}
+.delivery-note {
+font-size: 0.9rem;
+color: var(--muted);
+margin-top: 5px;
+padding: 0 5px;
+}
+</style>
+</head>
+<body>
+
+<button class="back-btn" onclick="window.location.href='products.html'">← العودة للمنتجات</button>
+
+<div class="container">
+    <div class="header">
+        <h1>إتمام الطلب</h1>
+        <p>يرجى ملء البيانات أدناه لإكمال طلبك</p>
+    </div>
+
+    <div class="main-section">
+        <form id="checkoutForm">
+            <div class="section-card">
+                <h2 class="section-title">البيانات الشخصية</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">الاسم الكامل *</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                        <span class="error-msg" id="nameError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">رقم الهاتف *</label>
+                        <input type="tel" id="phone" name="phone" placeholder="0791234567" required>
+                        <span class="error-msg" id="phoneError"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">العنوان بالتفصيل *</label>
+                    <textarea id="address" name="address" rows="3" placeholder="المنطقة، الشارع، رقم البناية، شقة..." required></textarea>
+                    <span class="delivery-note" id="deliveryFeeNote">(قد يُضاف سعر التوصيل على المجموع حسب بعد المكان)</span>
+                    <span class="error-msg" id="addressError"></span>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h2 class="section-title">طريقة التسليم</h2>
+                
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="delivery" name="deliveryMethod" value="delivery" checked>
+                        <label for="delivery">توصيل إلى العنوان (قد يضاف رسم)</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="pickup" name="deliveryMethod" value="pickup">
+                        <label for="pickup">استلام من المحل (دوار الطيارة)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h2 class="section-title">طريقة الدفع</h2>
+                
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="cash" name="paymentMethod" value="cash" checked>
+                        <label for="cash">كاش عند الاستلام / التسليم</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="transfer" name="paymentMethod" value="transfer">
+                        <label for="transfer">تحويل محفظة</label>
+                    </div>
+                </div>
+
+                <div style="display: none; margin-top: 15px;" id="bankInfoGroup">
+                    <div style="background: rgba(7,167,122,0.1); border-left: 3px solid var(--accent-2); padding: 15px; border-radius: 6px;">
+                        <p style="margin: 0 0 8px 0; font-weight: 600;">بيانات التحويل :</p>
+                        <p style="margin: 5px 0; color: var(--muted);">رقم التحويل : 0799343102</p>
+                        <p style="margin: 5px 0; color: var(--muted);">المحفظة : زين كاش</p>
+                        <p style="margin: 5px 0; color: var(--muted);">اسم صاحب الحساب : mustafa yousef ziadeh</p>
+                        <p style="margin: 5px 0; color: var(--muted);">ملاحظة مهمة عند تحويلك النقود الى المحفظة ارسل صورة تثبت ذلك لإعطائك المشتريات</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-card">
+                <h2 class="section-title">ملاحظات إضافية</h2>
+                
+                <div class="form-group">
+                    <label for="notes">ملاحظاتك (اختياري)</label>
+                    <textarea id="notes" name="notes" rows="3" placeholder="أي تعليقات أو متطلبات خاصة..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">إتمام الطلب</button>
+        </form>
+    </div>
+
+    <div class="sidebar">
+        <div class="order-summary">
+            <h3 class="summary-title">ملخص الطلب</h3>
+            
+            <div class="order-items" id="orderItemsContainer">
+            </div>
+
+            <div class="order-total">
+                <span class="total-label">الإجمالي:</span>
+                <span class="total-amount" id="totalPrice">0.00 د</span>
+            </div>
+            
+             <p style="color: var(--muted); font-size: 0.9rem; text-align: center; margin: 15px 0 0; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                <strong style="color: var(--accent-2);">وقت التجهيز المتوقع:</strong> <span id="preparationTime">0 دقائق</span>
+            </p>
+
+            <p style="color: var(--muted); font-size: 0.9rem; text-align: center; margin: 0;">
+                شكراً لتسوقك معنا
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+// =========================
+// 2. JavaScript (وظائف السلة والحذف والمنطق الجديد)
+// =========================
+
+const WHATSAPP_NUMBER = '962799343102'; // رقم صاحب المتجر
+
+// استرجاع الطلب من التخزين المحلي
+function getCartData() {
+    const localCart = localStorage.getItem('cart'); 
+    return localCart ? JSON.parse(localCart) : [];
+}
+
+
+// حفظ الطلب في التخزين المحلي
+function saveCartData(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+/**
+ * حساب وقت التجهيز الكلي بناءً على عناصر السلة (القاعدة الجديدة).
+ * القاعدة 1: مجموع دقائق التجهيز لكل عنصر (مضروباً بالكمية).
+ * القاعدة 2: على كل 5 منتجات 'فورية' (وقت تجهيزها 1 أو أقل) يضاف دقيقة واحدة إضافية.
+ */
+function calculatePreparationTime(cart) {
+    let totalPreparationMinutes = 0; // مجموع الدقائق من كل منتج (القاعدة 1)
+    let instantItemCount = 0;       // عداد للمنتجات الفورية (وقت تجهيزها 1 أو أقل)
+    
+    cart.forEach(item => {
+        // فترة التجهيز الافتراضية هي 1 (فوري)
+        const prepTimePerUnit = item.preparationTime || 1; 
+        const qty = item.qty || 1; 
+        
+        // 1. جمع دقائق التجهيز
+        totalPreparationMinutes += (prepTimePerUnit * qty); 
+        
+        // 2. عد المنتجات الفورية لإضافة الوقت الإضافي 
+        if (prepTimePerUnit <= 1) { 
+            instantItemCount += qty;
+        }
+    });
+    
+    // حساب الدقائق الإضافية للمنتجات الفورية: كل 5 وحدات فورية = 1 دقيقة
+    const bonusMinutes = Math.floor(instantItemCount / 5);
+    
+    // المجموع النهائي
+    const finalPrepTime = totalPreparationMinutes + bonusMinutes;
+    
+    // التأكد أن وقت التجهيز لا يقل عن 1
+    return Math.max(1, finalPrepTime);
+}
+
+
+// عرض عناصر الطلب وتحديث الإجمالي ووقت التجهيز
+function displayOrderItems() {
+    const cart = getCartData();
+    const container = document.getElementById('orderItemsContainer');
+    const submitButton = document.querySelector('.submit-btn');
+    const prepTimeEl = document.getElementById('preparationTime');
+    const deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked').value;
+    const deliveryNote = document.getElementById('deliveryFeeNote');
+
+    container.innerHTML = '';
+    
+    let total = 0;
+    
+    if (cart.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--muted);">سلتك فارغة</p>';
+        submitButton.disabled = true;
+        document.getElementById('totalPrice').textContent = '0.00 د';
+        prepTimeEl.textContent = '0 دقائق';
+        return;
+    }
+
+    submitButton.disabled = false;
+    
+    // تحديث وقت التجهيز الكلي
+    const prepTime = calculatePreparationTime(cart);
+    prepTimeEl.textContent = `${prepTime} دقائق`;
+
+
+    cart.forEach((item, index) => {
+        let itemTotalCost = 0;
+        let qtyDisplay = '';
+        let itemName = item.name;
+
+        // منطق حساب التكلفة (لم يتغير عن السابق)
+        if (item.isSpecialMeat) {
+            itemTotalCost = item.price || 0; 
+            qtyDisplay = `الفرم: ${item.grindType === 'fine' ? 'ناعم' : 'خشن' }`;
+            if (item.addons && item.addons.length > 0) {
+                qtyDisplay += ` | إضافات: ${item.addons.join(', ')}`;
+            }
+            if (item.orderType === 'amount' && item.meatValue) {
+                itemName += ` (قيمة ${item.meatValue.toFixed(2)} د)`;
+            } else if (item.orderType === 'pack') {
+                itemName += ` (باكية كاملة)`;
+            }
+
+        } else if (item.isWeighable && item.price === 0) {
+            itemTotalCost = 0; 
+            qtyDisplay = `${(item.qty || 0)} ${item.unit || 'كغم'}`;
+            itemName += ' (السعر يُحدد لاحقاً)';
+        
+        } else if (item.qty && item.price) {
+            itemTotalCost = item.price * item.qty; 
+            qtyDisplay = `${item.qty} ${item.unit || 'قطعة'}`;
+
+            if (item.variant && item.variant.unit) {
+                qtyDisplay = `${item.qty} ${item.variant.unit}`;
+                if (item.variant.name) {
+                    itemName += ` (${item.variant.name})`;
+                }
+            }
+        }
+
+        total += itemTotalCost;
+
+        // إنشاء العنصر
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('order-item');
+        itemDiv.setAttribute('data-index', index); 
+        
+        itemDiv.innerHTML = `
+            <div class="item-details">
+                <span class="item-name">${itemName}</span>
+                <span class="item-qty">${qtyDisplay}</span>
+            </div>
+            <span class="item-price">${itemTotalCost.toFixed(2)} د</span>
+            <button class="delete-item-btn" data-index="${index}" type="button" aria-label="حذف المنتج ${itemName}">
+                &times;
+            </button>
+        `;
+        
+        container.appendChild(itemDiv);
+    });
+    
+    document.getElementById('totalPrice').textContent = total.toFixed(2) + ' د';
+    
+    document.querySelectorAll('.delete-item-btn').forEach(btn => {
+        btn.addEventListener('click', removeItemFromCart);
+    });
+
+    // تحديث ملاحظة التسليم عند التحميل
+    if (deliveryMethod === 'pickup') {
+        deliveryNote.textContent = '(استلام من المحل: تعال على راحتك بعد وقت التجهيز)';
+        deliveryNote.style.color = 'var(--accent-2)';
+    } else {
+        deliveryNote.textContent = '(قد يُضاف سعر التوصيل على المجموع حسب بعد المكان)';
+        deliveryNote.style.color = 'var(--muted)';
+    }
+}
+
+// وظيفة حذف المنتج من السلة
+function removeItemFromCart(e) {
+    const indexToRemove = parseInt(e.currentTarget.getAttribute('data-index'));
+    let cart = getCartData();
+    
+    if (indexToRemove >= 0 && indexToRemove < cart.length) {
+        cart.splice(indexToRemove, 1);
+        saveCartData(cart);
+        displayOrderItems();
+    }
+}
+
+
+// معالجة الراديو بوتون لطريقة التسليم (لإظهار/إخفاء ملاحظة رسوم التوصيل)
+document.querySelectorAll('input[name="deliveryMethod"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        const deliveryNote = document.getElementById('deliveryFeeNote');
+        
+        if (e.target.value === 'pickup') {
+            deliveryNote.textContent = '(استلام من المحل: تعال على راحتك بعد وقت التجهيز)';
+            deliveryNote.style.color = 'var(--accent-2)';
+        } else {
+            deliveryNote.textContent = '(قد يُضاف سعر التوصيل على المجموع حسب بعد المكان)';
+            deliveryNote.style.color = 'var(--muted)';
+        }
+    });
+});
+
+
+// معالجة الراديو بوتون لطريقة الدفع
+document.querySelectorAll('input[name="paymentMethod"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        const bankGroup = document.getElementById('bankInfoGroup');
+        if (e.target.value === 'transfer') {
+            bankGroup.style.display = 'block';
+        } else {
+            bankGroup.style.display = 'none';
+        }
+    });
+});
+
+// معالجة إرسال النموذج وإرسال رسالة الواتساب
+document.getElementById('checkoutForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    // التحقق من الصحة (Validation)
+    let isValid = true;
+    const fullName = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
+    
+    // مسح الأخطاء السابقة
+    document.getElementById('nameError').textContent = '';
+    document.getElementById('phoneError').textContent = '';
+    document.getElementById('addressError').textContent = '';
+    
+    if (!fullName) {
+        document.getElementById('nameError').textContent = 'الاسم مطلوب';
+        isValid = false;
+    }
+    
+    if (!phone || !phone.match(/^07[789]\d{7}$/)) {
+        document.getElementById('phoneError').textContent = 'أدخل رقم هاتف أردني صحيح (10 أرقام)';
+        isValid = false;
+    }
+    
+    if (!address) {
+        document.getElementById('addressError').textContent = 'العنوان مطلوب بالتفصيل';
+        isValid = false;
+    }
+    
+    const cart = getCartData();
+    if (cart.length === 0) {
+        alert("لا يمكن إتمام الطلب. سلة التسوق فارغة.");
+        isValid = false;
+    }
+    
+    const deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked').value;
+
+    if (!isValid) return;
+    
+    // 1. جمع بيانات الطلب
+    const orderData = {
+        fullName,
+        phone,
+        address,
+        deliveryMethod,
+        pickupTime: deliveryMethod === 'pickup' ? 'الاستلام في أي وقت بعد التجهيز' : 'توصيل للمنزل',
+        paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
+        notes: document.getElementById('notes').value.trim(),
+        cart: cart,
+        totalPrice: document.getElementById('totalPrice').textContent,
+        preparationTime: document.getElementById('preparationTime').textContent 
+    };
+    
+    // 2. بناء رسالة WhatsApp للمتجر
+    const cartSummary = orderData.cart.map(item => {
+        let details = `${item.qty || 1} ${item.unit || 'قطعة'}`;
+        let itemPrice = (item.isWeighable && item.price === 0) ? '(السعر لاحقاً)' : `${(item.price * (item.qty || 1) || item.price || 0).toFixed(2)} د`;
+        
+        if (item.isSpecialMeat) {
+            details = item.orderType === 'pack' ? 'باكية' : `قيمة ${item.meatValue} د`;
+            if (item.grindType) details += ` | فرم: ${item.grindType === 'fine' ? 'ناعم' : 'خشن'}`;
+        } else if (item.isWeighable && item.price === 0) {
+            details = `${(item.qty || 0)} ${item.unit || 'كغم'}`;
+        } else if (item.variant) {
+            details = `${item.qty || 1} ${item.variant.unit || 'قطعة'}`;
+        }
+        
+        return `- ${item.name} | الكمية: (${details}) | السعر: ${itemPrice}`;
+    }).join('\n');
+
+    const deliveryNote = orderData.deliveryMethod === 'delivery' 
+        ? '*ملاحظة: (سيتم إضافة رسوم توصيل حسب المنطقة على المجموع)*'
+        : '';
+        
+    const prepTimeMessage = `*وقت التجهيز المتوقع*: ${orderData.preparationTime}`;
+
+    const whatsappMessage = `
+*--- طلب جديد من المتجر الإلكتروني ---*
+
+*بيانات العميل:*
+الاسم: ${fullName}
+الهاتف: ${phone}
+طريقة التسليم: ${orderData.deliveryMethod === 'pickup' ? `استلام من المحل (${orderData.pickupTime})` : 'توصيل للمنزل'}
+العنوان: ${address}
+طريقة الدفع: ${orderData.paymentMethod === 'cash' ? 'كاش عند الاستلام' : 'تحويل بنكي'}
+${orderData.notes ? `*ملاحظات إضافية:* ${orderData.notes}` : ''}
+
+*ملخص المنتجات:*
+${cartSummary}
+
+*الإجمالي الحالي*: ${orderData.totalPrice}
+${deliveryNote}
+
+${prepTimeMessage}
+    `.trim();
+    
+    // 3. الإرسال مباشرة إلى WhatsApp
+    const encodedMsg = encodeURIComponent(whatsappMessage);
+    const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodedMsg}`;
+    
+    // تنظيف السلة وحفظ البيانات
+    localStorage.removeItem('cart');
+
+    // فتح نافذة الواتساب مباشرة
+    window.open(whatsappLink, '_blank', 'noopener');
+    
+    // لعرض رسالة تأكيد للمستخدم بعد فتح نافذة الواتساب
+    const successDiv = document.createElement('div');
+    successDiv.className = 'success-msg';
+    successDiv.innerHTML = `
+        <strong>تم تحويلك إلى WhatsApp! ✓</strong><br>
+        الرجاء إرسال رسالة الطلب لتأكيده.
+    `;
+    
+    document.querySelectorAll('.success-msg').forEach(el => el.remove());
+    document.querySelector('.main-section').insertBefore(successDiv, document.getElementById('checkoutForm'));
+    document.querySelector('.submit-btn').disabled = true;
+
+    // تحديث الملخص بعد الحذف
+    setTimeout(() => {
+        displayOrderItems(); 
+    }, 500);
+});
+
+// تحميل البيانات عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', displayOrderItems);
+</script>
+
+</body>
+</html>

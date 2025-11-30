@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منتجات سوبر ماركت دوار الطيارة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+
+:root {
+    --bg: #0a0a0a;
+    --card-bg: #111;
+    --text: #efefef;
+    --accent: #ffd54b;
+    --radius: 16px;
+    --shadow: 0 12px 40px rgba(0,0,0,0.7);
+    font-family: 'Cairo', sans-serif;
+}
+
+/* Base styles */
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-family: 'Cairo', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+}
+
+/* Toolbar (Search and Cart Button) */
+.toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    max-width: 1200px;
+    margin-bottom: 25px;
+    gap: 10px;
+}
+
+.toolbar input {
+    flex: 1;
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    border: none;
+    outline: none;
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 1.2rem;
+    text-align: right;
+}
+
+/* Style for the cart link/button */
+.toolbar a.cart-link {
+    padding: 12px 20px;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: var(--radius);
+    background: none;
+    color: var(--accent);
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.toolbar a.cart-link:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.1);
+}
+
+
+/* Products Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    width: 90%;
+    max-width: 1200px;
+    justify-content: center;
+}
+
+/* Product Card */
+.product-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 18px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 360px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.product-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: var(--radius);
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover img {
+    transform: scale(1.05);
+}
+
+.product-card h3 {
+    margin: 12px 0 4px 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-height: 38px;
+}
+
+.product-card p {
+    margin: 4px 0;
+    font-size: 1rem;
+    color: #aaa;
+}
+
+.product-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow);
+}
+
+/* Modal Overlay */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    z-index: 999;
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Modal Content */
+.modal-content {
+    background: var(--card-bg);
+    width: 70%;
+    height: 70%;
+    max-width: none;
+    max-height: none;
+    display: flex;
+    gap: 20px;
+    border-radius: 20px;
+    padding: 25px;
+    transform: translateY(40px) scale(0.9);
+    opacity: 0;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    position: relative;
+}
+/* الانتقال بين الصفحات */
+.page-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* استخدم نفس لون الخلفية لتأثير التلاشي الأنيق */
+  background-color: #0a0a0a; 
+  z-index: 99999; /* تأكد أنه أعلى من كل شيء */
+  opacity: 1; /* يبدأ مرئياً */
+  pointer-events: none;
+  transition: opacity 0.4s ease-in-out; /* مدة الانتقال هي 400ms */
+}
+/* هذه الفئة تُضاف بواسطة JavaScript عند الضغط على رابط */
+.page-transition.is-leaving {
+  opacity: 1; 
+  pointer-events: auto;
+}
+
+.modal.active .modal-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.modal-content img {
+    width: 40%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 14px;
+}
+
+.modal-details {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.modal-details h2 {
+    font-size: 2rem;
+    color: var(--accent);
+    margin-bottom: 12px;
+}
+
+.modal-details p {
+    margin: 6px 0;
+    font-size: 1.05rem;
+    color: #ccc;
+}
+
+.modal-details .price {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 12px 0;
+    color: var(--accent);
+}
+
+.modal-details .prep-time {
+    color: #07a77a;
+    font-size: 1.05rem;
+}
+
+.modal-details select,
+.modal-details input[type="number"],
+.meat-options select {
+    width: 100%;
+    max-width: 250px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    margin: 8px 0 10px;
+    text-align: right;
+    font-size: 1.1rem;
+    background: #333;
+    color: var(--text);
+    box-sizing: border-box;
+}
+
+/* Special Meat Options Styling */
+.meat-options {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #333;
+}
+
+.meat-options .input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.meat-options .addons {
+    margin-top: 10px;
+    padding: 10px;
+    background: #1e1e1e;
+    border-radius: 10px;
+}
+
+.meat-options .addons label {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.meat-options .addons input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-left: 10px;
+    accent-color: var(--accent);
+}
+
+#meatCalculatedPrice {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #07a77a;
+    margin: 15px 0 10px;
+    text-align: center;
+    padding: 10px;
+    background: #1e1e1e;
+    border-radius: 10px;
+}
+
+
+/* Weighable Info */
+.weighable-info {
+    font-size: 1.2rem;
+    color: #f94144;
+    font-weight: 600;
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid rgba(249, 65, 68, 0.314);
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Add to Cart Button */
+.add-cart {
+    background: linear-gradient(90deg, var(--accent), #07a77a);
+    color: #051018;
+    font-size: 1.3rem;
+    padding: 14px 22px;
+    border: none;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    margin-top: 20px;
+    flex-shrink: 0;
+}
+
+/* Close Modal Button */
+.close-btn {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    right: auto;
+    background: #222;
+    color: var(--accent);
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 900px) {
+    .modal-content {
+        flex-direction: column;
+        width: 90%;
+        height: auto;
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+    .modal-content img {
+        width: 100%;
+        height: auto;
+        max-height: 40vh;
+        object-fit: contain;
+        margin-bottom: 20px;
+    }
+    .modal-details {
+        width: 100%;
+        height: auto;
+        overflow-y: visible;
+        padding-right: 0;
+    }
+    .modal-details select,
+    .modal-details input[type="number"],
+    .meat-options select {
+        max-width: 100%;
+    }
+}
+</style>
+</head>
+<body>
+
+    <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="ابحث عن منتج...">
+        <a class="cart-link" id="cartBtn" href="cart.html">🛒 <span id="cartCount">0</span></a>
+    </div>
+
+    <div class="grid" id="productGrid">
+        </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModal">&times;</button>
+            <img src="" alt="Product Image" id="modalImg">
+            <div class="modal-details">
+                <h2 id="modalName">اسم المنتج</h2>
+                <p id="modalDesc">وصف المنتج</p>
+
+                <div id="variantSelectContainer" class="hidden">
+                    <label for="modalVariantSelect">اختر الحجم/الوزن:</label>
+                    <select id="modalVariantSelect"></select>
+                </div>
+
+                <p class="price" id="modalPrice">السعر</p>
+                <p class="prep-time" id="modalPrep">مدة التجهيز</p>
+
+                <div id="specialMeatOptions" class="meat-options hidden">
+                    <div class="input-group">
+                        <label for="meatOrderType">طريقة الطلب:</label>
+                        <select id="meatOrderType">
+                            <option value="pack">باكيت كامل (3.25 د)</option>
+                            <option value="amount">بالقيمة (دينار) - الكيلو 4.00 د</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group hidden" id="meatAmountInput">
+                        <label for="meatValue">أدخل القيمة المطلوبة (دينار):</label>
+                        <input type="number" id="meatValue" value="1" min="1" step="0.5">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="meatGrindType">نوع الفرم:</label>
+                        <select id="meatGrindType">
+                            <option value="fine">ناعمة</option>
+                            <option value="coarse">خشنة</option>
+                        </select>
+                    </div>
+
+                    <div class="addons">
+                        <label>الإضافات (اختياري):</label>
+                        <label><input type="checkbox" id="addonOnion" data-price="0.10"> بصل (0.10 د)</label>
+                        <label><input type="checkbox" id="addonParsley" data-price="0.15"> بقدونس (0.15 د)</label>
+                    </div>
+
+                    <div id="meatCalculatedPrice">السعر الكلي: <span id="meatFinalPriceValue">3.25</span> دينار</div>
+                </div>
+
+                <div id="weighableInfo" class="weighable-info hidden">
+                    يُطلب بالوزن (كغم)، ويُحدد السعر النهائي بعد الوزن عند التجهيز.
+                </div>
+
+                <div id="qtyInputContainer">
+                    <label>الكمية (بالـ <span id="modalQtyUnit">وحدة</span>):</label>
+                    <input type="number" id="modalQty" value="1" min="0.5" step="0.5">
+                </div>
+
+                <button class="add-cart" id="addCartBtn">أضف إلى السلة</button>
+            </div>
+        </div>
+    </div>
+    
+<script>
+    // --------------------------------------------------------------------------------------
+    //  قائمة المنتجات المحدثة (82 منتج/مجموعة)
+    // --------------------------------------------------------------------------------------
+    const originalProducts = [
+        // ---------- اللحوم والدواجن (Weighable/Special Meat) 1-7 ----------
+        {name: "سمك مقطوع الرأس", price: 2.5, unit: "كغم", desc: "سمك مجمد مقطوع الرأس", img: "fish.jpg", prep: "فوري", isWeighable: true, isPerKg: true},
+        {name: "دجاج الطاحونة (كامل)", price: 1.75, unit: "حبة", desc: "دجاج طازج يومي (السعر تقديري)", img: "altahona.jpg", prep: "فوري", isWeighable: true, isPerKg: false},
+        {name: "دجاج الجزيرة (كامل)", price: 1.5, unit: "حبة", desc: "دجاج طازج يومي (السعر تقديري)", img: "Copy-of-op-13-600x338.jpg", prep: "فوري", isWeighable: true, isPerKg: false},
+        {name: "فخذ دجاج", price: 1.7, unit: "صفط", desc: "فخذ دجاج طازج ويومي (السعر تقديري)", img: "Rice15.jpg", prep: "دقيقة", isWeighable: true, isPerKg: false},
+        {name: "صدر دجاج", price: 3 , unit: "صفط", desc: "صدر دجاج طازج ويومي (السعر تقديري)", img: "Chicken.jpg", prep: "فوري", isWeighable: true, isPerKg: false},
+        {name: "اجنحة دجاج", price: 1.5, unit: "صفط", desc: "اجنحة دجاج طازجة ويومية (السعر تقديري)", img: "Chicken1.jpg", prep: "فوري", isWeighable: true, isPerKg: false},
+        {name: "لحم عجل", unit: "كغم", desc: "لحم عجل رضيع مجمد", img: "meet.jpg", prep: "5 دقائق", isSpecialMeat: true, packPrice: 3.25, pricePerKg: 4.0, addons: {onion: 0.10, parsley: 0.15}}, // تم حذف 'both' للحفاظ على توافق منطق الكود
+
+        // ---------- الأجبان والألبان (Variants & Regular) 8-16 ----------
+        {name: "جبنة مثلثات المراعي", variants: [
+            {size: "8 قطع", price: 0.85, unit: "باكيت", desc: "جبنة مثلثات المراعي 8 قطع", img: "cheese.jpg", prep: "فوري"},
+            {size: "16 قطعة", price: 1.6, unit: "باكيت", desc: "جبنة مثلثات المراعي 16 قطعة", img: "cheese7.jpg", prep: "فوري"},
+            {size: "24 قطعة", price: 2.4, unit: "باكيت", desc: "جبنة مثلثات المراعي 24 قطعة", img: "cheese8.jpg", prep: "فوري"},
+        ]},
+        {name: "جبنة مثلثات تانو (8 قطع)", price: 0.5, unit: "باكيت", desc: "جبنة مثلثات تانو 8 قطع", img: "cheese1.jpg", prep: "فوري"},
+        {name: "جبنة مثلثات باندا", variants: [
+            {size: "8 قطع", price: 0.35, unit: "باكيت", desc: "جبنة مثلثات باندا 8 قطع", img: "cheese2.jpg", prep: "فوري"},
+            {size: "24 قطعة", price: 1, unit: "باكيت", desc: "جبنة مثلثات باندا 24 قطعة", img: "cheese9.jpg", prep: "فوري"},
+        ]},
+        {name: "لبن رايب بلودان", price: 1, unit: "علبة", desc: "لبن رايب بلودان 900 غ ", img: "yogurt.jpg", prep: "فوري"},
+        {name: "لبن رايب حمودة", price: 1, unit: "علبة", desc: "لبن رايب حمودة 900 غ", img: "yogurt1.jpg", prep: "فوري"},
+        {name: "لبن رايب اليوم", price: 1.25, unit: "علبة", desc: "لبن رايب اليوم 1 كيلو", img: "Yogurt2.jpg", prep: "فوري"},
+        {name: "جبنة فيتا باندا", variants: [
+            {size: "كبير", price: 0.85, unit: "باكيت", desc: "جبنة فيتا باندا الحجم الكبير", img: "cheese3.jpg", prep: "فوري"}, 
+            {size: "صغير", price: 0.4, unit: "باكيت", desc: "جبنة فيتا باندا الحجم الصغير", img: "cheese4.jpg", prep: "فوري"},
+        ]},
+        {name: "جبنة سائلة باندا", price: 1.25, unit: "علبة", desc: "جبنة سائلة باندا", img: "cheese6.jpg", prep: "فوري"},
+        {name: "جبنة لذيذة", variants: [
+            {size: "كيلو", price: 4, unit: "حبة", desc: "جبنة لذيذة الحجم الكبير", img: "cheese5.jpg", prep: "فوري"},
+            {size: "نصف كيلو", price: 2.4, unit: "حبة", desc: "جبنة لذيذة نصف كيلو", img: "cheese10.jpg", prep: "فوري"},
+            {size: "200 غ", price: 1.25, unit: "حبة", desc: "جبنة لذيذة الحجم الصغير", img: "cheese11.jpg", prep: "فوري"}
+        ]},
+
+        // ---------- الأرز والسكر والبقوليات 17-38 ----------
+        {name: "رز تايجر", variants: [
+            {size: "9 كغم", price: 9.5, unit: "باكيت", desc: "رز تايجر 9 كيلو", img: "Rice3.jpg", prep: "فوري"},
+            {size: "3.5 كغم", price: 3.5, unit: "باكيت", desc: "رز تايجر 3.5 كيلو", img: "Rice2.jpg", prep: "فوري"},
+        ]},
+        {name: "سكر الأسرة", variants: [
+            {size: "10 كغم", price: 5.75, unit: "باكيت", desc: "سكر الأسرة 10 كيلو", img: "Sugar.jpg", prep: "فوري"}, 
+            {size: "5 كغم", price: 3.25, unit: "باكيت", desc: "سكر الأسرة 5 كيلو", img: "Sugar4.jpg", prep: "فوري"}, 
+            {size: "2 كغم", price: 1.5, unit: "باكيت", desc: "سكر الأسرة 2 كيلو", img: "Sugar1.jpg", prep: "فوري"}, 
+            {size: "1 كغم", price: .75, unit: "باكيت", desc: "سكر الأسرة 1 كيلو", img: "Sugar6.jpg", prep: "فوري"},
+        ]},
+        {name: "سكر شعبان", price: 4.5, unit: "9 كغم", desc: "سكر شعبان 9 كيلو", img: "Sugar2.jpg", prep: "فوري"},
+        {name: "سكر صن بيرد", price: 2, unit: "3.5 كغم", desc: "سكر صن بيرد 3.5 كيلو", img: "Sugar3.jpg", prep: "فوري"},
+        {name: "رز فلفليهم", price: 3.25, unit: "3.3 كغم", desc: "رز فلفليهم 3.3 كيلو", img: "Rice.jpg", prep: "فوري"},
+        {name: "رز الأميرات", price: 4.5, unit: "3.5 كغم", desc: "رز الأميرات 3.5 كيلو", img: "Rice4.jpg", prep: "فوري"},
+        {name: "رز الأميرات 8 كغم", price: 9.5, unit: "8 كغم", desc: "رز الأميرات 9 كيلو", img: "Rice6.jpg", prep: "فوري"},
+        {name: "رز خليفة", price: 8.75, unit: "10 كغم", desc: "رز خليفة 10 كيلو", img: "Rice7.jpg", prep: "فوري"},
+        {name: "رز صن توب", price: 8.5, unit: "8 كغم", desc: "رز صن توب 8 كيلو", img: "Rice8.jpg", prep: "فوري"},
+        {name: "رز صنوايت", price: 5, unit: "4 كغم", desc: "رز صنوايت 4 كيلو", img: "Rice9.jpg", prep: "فوري"},
+        {name: "رز مندي", price: 4.25, unit: "4 كغم", desc: "رز مندي 4 كيلو", img: "Rice10.jpg", prep: "فوري"},
+        {name: "رز تيلدا", price: 4, unit: "4 كغم", desc: "رز تيلدا 4 كيلو", img: "Rice11.jpg", prep: "فوري"},
+        {name: "رز مستانة", price: 5.5, unit: "4 كغم", desc: "رز مستانة 4 كيلو", img: "Rice12.jpg", prep: "فوري"},
+        {name: "رز مصطفى 4 كغم", price: 5, unit: "4 كغم", desc: "رز مصطفى 4 كيلو", img: "Rice13.jpg", prep: "فوري"},
+        {name: "رز مصطفى 1 كغم", price: 1.6, unit: "1 كغم", desc: "رز مصطفى 1 كيلو", img: "Rice14.jpg", prep: "فوري"},
+        {name: "فول الكسيح", price: 0.5, unit: "حبة", desc: "فول الكسيح كرتون", img: "Beans.jpg", prep: "فوري"},
+        {name: "فول الدرة", price: 0.35, unit: "علبة", desc: "فول الدرة علب ", img: "Beans1.jpg", prep: "فوري"},
+        {name: "فول ماركا", price: 0.25, unit: "علبة", desc: "فول ماركا ", img: "Beans2.jpg", prep: "فوري"},
+        {name: "حمص حب علب", price: 0.4, unit: "علبة", desc: "حمص حب علب", img: "Homos.jpg", prep: "فوري"},
+        {name: "حمص الكسيح", price: 0.35, unit: "حبة", desc: "حمص مطحون الكسيح", img: "Homos1.jpg", prep: "فوري"},
+        {name: "فول الكسيح", price: 0.5, unit: "حبة", desc: "فول الكسيح كرتون", img: "Fool.jpg", prep: "فوري"}, // تم تعديل isPerKg
+        
+        // ---------- الشاي والقهوة 39-48 ----------
+        {name: "شاي الغزالين", variants: [
+            {size: "100 ميدالية", price: 1.65, unit: "باكيت", desc: "شاي الغزالين 100 ميدالية", img: "tee4.jpg", prep: "فوري"}, 
+            {size: "25 ميدالية", price: 0.5, unit: "باكيت", desc: "شاي الغزالين 25 ميدالية", img: "tee5.jpg", prep: "فوري"}, 
+            {size: "10 ميداليات", price: 0.25, unit: "باكيت", desc: "شاي الغزالين 10 ميداليات", img: "tee6.jpg", prep: "فوري"},
+        ]},
+        {name: "شاي ربيع", price: 2.25, unit: "باكيت", desc: "شاي ربيع الأقوى 100 ميدالية", img: "tee.jpg", prep: "فوري"},
+        {name: "شاي الكابوس 100", price: 1.9, unit: "باكيت", desc: "شاي الكابوس 100 ميدالية", img: "tee2.jpg", prep: "فوري"},
+        {name: "شاي الكابوس 227", price: 1.5, unit: "باكيت", desc: "شاي الكابوس حلل 227 غ", img: "tee3.jpg", prep: "فوري"},
+        {name: "شاي ليبتون", price: 1.75, unit: "باكيت", desc: "شاي ليبتون 100 ميدالية", img: "tee7.jpg", prep: "فوري"},
+        {name: "شاي كرك", price: 2, unit: "باكيت", desc: "شاي كرك", img: "Tea.jpg", prep: "فوري"},
+        {name: "قهوة العميد", price: 4, unit: "باكيت", desc: "قهوة العميد 250 غ", img: "coffee.jpg", prep: "فوري"},
+        {name: "قهوة معروف", price: 2.75, unit: "باكيت", desc: "قهوة معروف 250 غ", img: "coffee1.jpg", prep: "فوري"},
+        {name: "قهوة السمان", price: 1, unit: "باكيت", desc: "قهوة السمان سعودية", img: "coffee3.jpg", prep: "فوري"},
+        {name: "قهوة الحموي", price: 2.5, unit: "باكيت", desc: "قهوة بن الحموي 250 غ", img: "coffee2.jpg", prep: "5 دقائق"}, 
+        {name: "بيت البن البرازيلي", price: 3.25, unit: "علبة", desc: "قهوة بيت البن البرازيلي", img: "coffee4.jpg", prep: "فوري"},
+        {name: "نسكافيه Good day", price: 3.5, unit: "باكيت", desc: "نسكافيه Good day ", img: "Goodday.jpg", prep: "فوري"},
+        {name: "كابتشينو", price: 3.75, unit: "باكيت", desc: "كابتشينو Good day", img: "Goodday1.jpg", prep: "فوري"},
+
+        // ---------- المعلبات والتوابل 49-62 ----------
+        {name: "ملح ساسي", price: 0.25, unit: "باكيت", desc: "ملح ناعم", img: "Salt.jpg", prep: "فوري"},
+        {name: "ملح عمرة", price: 0.2, unit: "باكيت", desc: "ملح ناعم", img: "Salt1.jpg", prep: "فوري"},
+        {name: "تونة الصياد", price: 0.75, unit: "علبة", desc: "تونة الصياد ", img: "Tuna.jpg", prep: "فوري"},
+        {name: "تونة صن بل", price: 1, unit: "علبة", desc: "تونة صن بل", img: "Tuna1.jpg", prep: "فوري"},
+        {name: "سمنة البلقاء", variants: [
+            {size: "سمنة البلقاء", price: 3.25, unit: "علبة", desc: "سمنة البلقاء الحجم الكبير", img: "Ghee.jpg", prep: "فوري"}, 
+            {size: "سمنة البلقاء", price: 1.75, unit: "علبة", desc: "سمنة البلقاء الحجم الصغير", img: "Ghee3.jpg", prep: "فوري"}, 
+]},
+        {name: "سمنة الاصيل", variants: [
+            {size: "سمنة الاصيل", price: 3.25, unit: "علبة", desc: "سمنة الاصيل الحجم الكبير", img: "Ghee1.jpg", prep: "فوري"}, 
+            {size: "سمنة الاصيل", price: 1.75, unit: "علبة", desc: "سمنة الاصيل الحجم الصغير", img: "Ghee4.jpg", prep: "فوري"}, 
+]},
+        {name: "سمنة الغزال", variants: [
+            {size: "سمنة الغزال", price: 3.25, unit: "علبة", desc: "سمنة الغزال الحجم الكبير", img: "Ghee2.jpg", prep: "فوري"}, 
+            {size: "سمنة البلقاء", price: 1.75, unit: "علبة", desc: "سمنة البلقاء الحجم الصغير", img: "Ghee5.jpg", prep: "فوري"}, 
+]},
+        {name: "ماجي كنور", price: 1.3, unit: "باكيت", desc: "ماجي كنور", img: "Konr.jpg", prep: "فوري"},
+        {name: "ماجي زغلول", price: 1, unit: "باكيت", desc: "ماجي زغلول", img: "Konr1.jpg", prep: "فوري"},
+        {name: "لحمة اكسترا", variants: [
+            {size: "كبير", price: 1.9, unit: "علبة", desc: "لحمة اكسترا حجم كبير", img: "Extra.jpg", prep: "فوري"},
+            {size: "صغير", price: 1.6, unit: "علبة", desc: "لحمة اكسترا حجم صغير", img: "Extra1.jpg", prep: "فوري"},
+        ]},
+        {name: "دبس رمان اليمامة", price: 1.5, unit: "علبة", desc: "دبس رمان اليمامة الحجم الصغير", img: "molasses.jpg", prep: "فوري"},
+        {name: "دبس رمان عنجر", price: 2.5, unit: "علبة", desc: "دبس رمان عنجر الحجم الصغير", img: "molasses1.jpg", prep: "فوري"},
+        {name: "صلصة خليفة", price: 1.75, unit: "علبة", desc: "معجون طماطم خليفة", img: "Khalifa1.jpg", prep: "فوري"},
+        {name: "صلصة 222", price: 1.25, unit: "علبة", desc: "صلصة 222", img: "Albarakeh1.jpg", prep: "فوري"}, // تم تعديل isPerKg
+
+        // ---------- الصلصات والزيوت 63-68 ----------
+        {name: "كاتشاب الحياة", variants: [
+            {size: "حجم صغير", price: 0.6, unit: "علبة", desc: "كاتشاب الحياة الحجم الصغير", img: "Hayat.jpg", prep: "فوري"},
+            {size: "حجم كبير", price: 1.35, unit: "علبة", desc: "كاتشاب الحياة الحجم الكبير", img: "Hayat2.jpg", prep: "فوري"},
+        ]},
+        {name: "مايونيز الحياة", variants: [
+            {size: "حجم وسط", price: 1, unit: "علبة", desc: "مايونيز الحياة الحجم الوسط", img: "Hayat1.jpg", prep: "فوري"},
+            {size: "حجم صغير", price: 0.5, unit: "علبة", desc: "مايونيز الحياة الحجم الصغير", img: "Hayat4.jpg", prep: "فوري"},
+            {size: "حجم عائلي", price: 1.35, unit: "علبة", desc: "مايونيز الحياة الحجم العائلي", img: "Hayat3.jpg", prep: "فوري"},
+        ]},
+        {name: "مايونيز الدرة", price: 0.9, unit: "علبة", desc: "مايونيز الدرة", img: "Durra.jpg", prep: "فوري"},
+        {name: "كريمة طبخ", variants: [
+            {size: "حجم كبير", price: 3, unit: "باكيت", desc: "كريمة طبخ - حجم كبير", img: "grancucina.jpg", prep: "فوري"},
+            {size: "حجم وسط", price: 1.75, unit: "باكيت", desc: "كريمة طبخ - حجم وسط", img: "grancucina1.jpg", prep: "فوري"},
+            {size: "حجم صغير", price: 1, unit: "باكيت", desc: "كريمة طبخ - حجم صغير", img: "grancucina3.jpg", prep: "فوري"},
+        ]},
+
+        // ---------- المشروبات والمياه (Variants & Regular) 69-70 ----------
+        {name: "ماتريكس", variants: [
+            {size: "1.5 لتر", price: 1.0, unit: "علبة", desc: "ماتريكس الحجم الكبير (1.5 لتر)", img: "matrix1.jpg", prep: "فوري"},
+            {size: "1 لتر", price: 0.6, unit: "علبة", desc: "ماتريكس الحجم الوسط (1 لتر)", img: "matrix.jpg", prep: "فوري"}, 
+            {size: "250 مل", price: 0.25, unit: "علبة", desc: "ماتريكس العلب الصغيرة (250 مل)", img: "matrix2.jpg", prep: "فوري"}, 
+        ]},
+        
+        // ---------- المخبوزات والحلويات 71 ----------
+        {name: "اندومي", price: 0.95, unit: "باكيت", desc: "اندومي باكيت 5 حبات", img: "Indomie.jpg", prep: "فوري"},
+        {name: "معكرونة العزيمة", price: 1, unit: "7 باكيتات", desc: "معكرونة العزيمة 7 حبات بدينار ", img: "Alazema.jpg", prep: "فوري"},
+
+        // ---------- المنظفات والمستلزمات المنزلية 72-82 ----------
+        {name: "سائل جلي غولدن", variants: [
+            {size: "1 لتر", price: 1.35, unit: "علبة", desc: "سائل جلي غولدن الحجم الكبير (1 لتر)", img: "Golden.jpg", prep: "فوري"},
+            {size: "500 مل", price: 0.85, unit: "علبة", desc: "سائل جلي غولدن الحجم الأصغر (500 مل)", img: "Golden1.jpg", prep: "فوري"}, 
+        ]},
+        {name: "هايبكس", price: 1, unit: "علبة", desc: "هايبكس الاصلي", img: "Hypex.jpg", prep: "فوري"}, // تم تعديل isPerKg
+        {name: "سرف سار", price: 0.2, unit: "باكيت", desc: "سرف سار حجم صغير", img: "Sar.jpg", prep: "فوري"},
+        {name: "سرف تايد", price: 0.25, unit: "باكيت", desc: "سرف تايد حجم صغير", img: "Tide.jpg", prep: "فوري"},
+        {name: "سرف ايريال", price: 0.25, unit: "باكيت", desc: "سرف ايريال حجم صغير", img: "Arial.jpg", prep: "فوري"}, // تم تعديل isPerKg
+        {name: "سرف الجزيرة", price: 1, unit: "باكيت", desc: "سرف الجزيرة حجم صغير", img: "Aljazira.jpg", prep: "فوري"},
+        {name: "سرف توري", price: 1, unit: "باكيت", desc: "سرف توري حجم صغير", img: "Touri.jpg", prep: "فوري"},
+        {name: "معطر ارضيات", price: 1, unit: "علبة", desc: "معطر ارضيات لويال", img: "Loyal.jpg", prep: "فوري"}, // تم تعديل isPerKg
+        {name: "معطر جو ", price: 1, unit: "علبة", desc: "معطر جو لويال", img: "Loyal1.jpg", prep: "فوري"},
+        {name: "فلاش", price: 1.5, unit: "علبة", desc: "فلاش نوعية اصلية", img: "Flash.jpg", prep: "فوري"}, // تم تعديل isPerKg
+        {name: "سيتريس", price: 1.5, unit: "علبة", desc: "سيتريس نوعية اصلية", img: "Cetris.jpg", prep: "فوري"},
+        {name: "شامبو كلير", price: 2.5, unit: "علبة", desc: "شامبو كلير", img: "Clear.jpg", prep: "فوري"},
+        {name: "شامبو بانتين", price: 2.5, unit: "علبة", desc: "شامبو بانتين", img: "Pantene.jpg", prep: "فوري"},
+        {name: "شامبو بيرت بلس", price: 2.5, unit: "علبة", desc: "شامبو بيرت بلاس", img: "Pert.jpg", prep: "فوري"}, // تم تعديل isPerKg
+        {name: "فاين فلافي", price: 2, unit: "3 باكيتات", desc: "فاين فلافي 3 باكيتات", img: "fain.jpg", prep: "فوري"},
+        {name: "فاين مطبخ", price: 0.5, unit: "حبة", desc: "فاين مطبخ", img: "fine1.jpg", prep: "فوري"},
+        {name: "فاين حمام", price: 1.5, unit: "باكيت", desc: "فاين مطبخ", img: "fine2.jpg", prep: "فوري"}, // تم تعديل isPerKg
+        {name: "ليف جلي", price: 0.1, unit: "حبة", desc: "ليفة جلي ", img: "Lifa.jpg", prep: "فوري"},
+        
+        // ---------- منتجات الحليب المجفف 83-85 ----------
+        {name: "حليب حليبنا", variants: [
+            {size: "800 غرام", price: 3.75, unit: "باكيت", desc: "حليب حليبنا بودرة 800 غ", img: "milk.jpg", prep: "فوري"},
+            {size: "400 غرام", price: 2, unit: "باكيت", desc: "حليب حليبنا بودرة 400 غ", img: "milk3.jpg", prep: "فوري"},
+        ]},
+        {name: "حليب انجوي", variants: [
+            {size: "كبير", price: 2.5, unit: "باكيت", desc: "حليب انجوي بودرة حجم كبير", img: "milk4.jpg", prep: "فوري"},
+            {size: "صغير", price: 1.5, unit: "باكيت", desc: "حليب انجوي بودرة حجم صغير", img: "milk1.jpg", prep: "فوري"},
+        ]},
+        {name: "حليب كامل السعودية", variants: [
+            {size: "1 لتر", price: 1, unit: "باكيت", desc: "حليب سائل السعودية 1 لتر", img: "milk2.jpg", prep: "فوري"},
+            {size: "2 لتر", price: 0.95, unit: "باكيت", desc: "حليب سائل السعودية نصف لتر", img: "milk5.jpg", prep: "فوري"},
+        ]},
+        {name: "بيض", variants: [
+            {size: "XL", price: 3, unit: "طبق", desc: "بيض XL", img: "EGGS.jpg", prep: "فوري"}, 
+            {size: "L", price: 2.75, unit: "طبق", desc: "بيض L", img: "EGGS.jpg", prep: "فوري"},
+        ]},
+
+        // ---------- منتجات إضافية 86-105 (استكمالاً لقائمة المستخدم) ----------
+        {name: "ملوخية امريكانا", price: 1.5, unit: "باكيت", desc: "ملوخية امريكانا مجمدة", img: "Amricana.jpg", prep: "فوري"},
+        {name: "ملوخية مصرية", price: 0.5, unit: "باكيت", desc: "ملوخية مصرية مجمدة", img: "Foodico.jpg", prep: "فوري"},
+        {name: "بازيلاء وجزر", price: 0.75, unit: "باكيت", desc: "بازيلاء وجزر هنغاري مجمد", img: "Peas.jpg", prep: "فوري",  },
+        {name: "بازيلاء", price: 0.75, unit: "باكيت", desc: "بازيلاء سادة هنغاري مجمد", img: "Peas1.jpg", prep: "فوري"},
+        {name: "بطاطا مجمدة", price: 3, unit: "كيس", desc: " بطاطا بلجيكية مجمدة 2.5 كيلو", img: "Potato.jpg", prep: "فوري"},
+        {name: "بطاطا مجمدة", price: 1.5, unit: "كيس", desc: "بطاطا بلجيكية مجمدة 1 كيلو", img: "Potato1.jpg", prep: "فوري", },
+        {name: "زنجر نبيل", variants: [
+            {size: "حلو", price: 3.75, unit: "كيس", desc: "زنجر نبيل حلو ", img: "chicken3.jpg", prep: "فوري"}, 
+            {size: "حار", price: 3.75, unit: "كيس", desc: "زنجر نبيل حار", img: "chicken4.jpg", prep: "فوري"},
+        ]},
+        {name: "صدر دجاج", price: 2.5, unit: "باكيت", desc: "صدر دجاج مجمد الريان 1 كيلو", img: "chicken5.jpg", prep: "فوري"},
+        {name: "صدر دجاج", price: 6.5, unit: "باكيت", desc: "صدر دجاج مجمد سنيورة 2.5 كيلو", img: "chicken6.jpg", prep: "فوري"},
+        {name: "ذرة مجمدة", price: 1, unit: "باكيت", desc: "ذرة مجمدة بلجيكية", img: "corn.jpg", prep: "فوري", },
+        {name: "ختف خاروف", price: 6.25, unit: "كيلو", desc: "كتف خاروف نيوزلندي مجمد", img: "Meat.jpg", isWeighable : true , isPerKg : false , prep: "فوري"},
+        {name: "برجر جامبو", price: 3.5, unit: "باكيت", desc: "برجر لحم 10 قطع جامبو", img: "Burger.jpg", prep: "فوري"},
+        {name: "حلاوة الدرة", price: 2, unit: "علبة", desc: "حلاوة الدرة 700 غ ", img: "Halawa.jpg", prep: "فوري"},
+        {name: "حلاوة سرور", price: 1, unit: "علبة", desc: "حلاوة السرور 400 غ", img: "sroor.jpg", prep: "فوري"},
+        {name: "حلاوة النجاح", variants: [
+            {size: "250 غ ", price: 1, unit: "علبة", desc: "حلاوة النجاح 250 غ", img: "alnajah.jpg", prep: "فوري"},
+            {size: "600 غ", price: 2.5, unit: "علبة", desc: "حلاوة النجاح 600 غ", img: "alnajah.jpg", prep: "فوري"},
+            {size: "1 كيلو", price: 4, unit: "علبة", desc: "حلاوة النجاح 1 كيلو", img: "alnajah.jpg", prep: "فوري"},
+        ]},
+        {name: "جميد المعلم", price: 5.5, unit: "كغم", desc: "جميد المعلم اقراص", img: "jameed3.jpg", prep: "فوري", isWeighable: true, isPerKg: true},
+        {name: "جميد الباشا", price: 5.5, unit: "كغم", desc: "جميد الباشا اقراص", img: "jameed4.jpg", prep: "فوري" , isWeighable: true, isPerKg: true},
+        {name: "معكرونة فوتشيني", price: 1.5, unit: "باكيت", desc: "معكرونة فوتشيني ", img: "Fucini.jpg", prep: "فوري"},
+        {name: "قشطة انجوي", price: 0.5, unit: "علبة", desc: "قشطة انجوي", img: "enjoy.jpg", prep: "فوري"},
+        {name: "شقطة KDD", price: 1.35, unit: "باكيت", desc: "قشطة kDD 4 حبات", img: "KDD.jpg", prep: "فوري"},
+        {name: "حليب مكثف", price: 1.25, unit: "علبة", desc: "حليب مكثف محلى ريتاج", img: "milk6.jpg", prep: "فوري"},
+        {name: "دبس تمر", variants: [
+            {size: "900 غ", price: 2.5, unit: "علبة", desc: "دبس تمر الواحة 900 غ", img: "syrup.jpg", prep: "فوري"},
+            {size: "450 غ", price: 1.25, unit: "علبة", desc: "دبس تمر الواحة 450 غ", img: "syrup1.jpg", prep: "فوري"},
+        ]},
+        {name: "حليب السعودية", price: 0.25, unit: "حبة", desc: "حليب منكه السعودية", img: "alsaudia.jpg", prep: "فوري"},
+    ];
+    
+
+    let currentProducts = [...originalProducts];
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let currentItem = null;
+    let productsForRendering = []; // قائمة المنتجات المجهزة للعرض والبحث
+
+    // DOM Elements
+    const productGrid = document.getElementById('productGrid');
+    const modal = document.getElementById('modal');
+    const modalName = document.getElementById('modalName');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalImg = document.getElementById('modalImg');
+    const modalPrice = document.getElementById('modalPrice');
+    const modalPrep = document.getElementById('modalPrep');
+    const modalQty = document.getElementById('modalQty');
+    const modalQtyUnit = document.getElementById('modalQtyUnit');
+    const closeModalBtn = document.getElementById('closeModal');
+    const addCartBtn = document.getElementById('addCartBtn');
+    const cartCountSpan = document.getElementById('cartCount');
+    const modalVariantSelect = document.getElementById('modalVariantSelect');
+    const variantSelectContainer = document.getElementById('variantSelectContainer');
+    const searchInput = document.getElementById('searchInput');
+    const weighableInfo = document.getElementById('weighableInfo');
+    const qtyInputContainer = document.getElementById('qtyInputContainer');
+
+    // Special Meat Elements
+    const specialMeatOptions = document.getElementById('specialMeatOptions');
+    const meatOrderType = document.getElementById('meatOrderType');
+    const meatAmountInput = document.getElementById('meatAmountInput');
+    const meatValue = document.getElementById('meatValue');
+    const meatGrindType = document.getElementById('meatGrindType');
+    const addonOnion = document.getElementById('addonOnion');
+    const addonParsley = document.getElementById('addonParsley');
+    const meatFinalPriceValue = document.getElementById('meatFinalPriceValue');
+
+
+    // 1. Prepare Products for Rendering (robust version)
+    function prepareProductsForRendering(products) {
+        return products.map(p => {
+            let baseProduct = { ...p };
+
+            if (p.variants && p.variants.length > 0) {
+                const firstVariant = p.variants[0];
+                
+                // Overwrite parent details with first variant details for display
+                baseProduct.price = firstVariant.price;
+                baseProduct.unit = firstVariant.unit;
+                baseProduct.desc = firstVariant.desc;
+                baseProduct.img = firstVariant.img;
+                baseProduct.prep = firstVariant.prep;
+                
+                // Add flags for easier rendering/modal logic
+                baseProduct.isVariantSet = true; 
+                // Adjust name for display in card (optional, useful for variant display)
+                baseProduct.name = p.name + (firstVariant.size ? '' : '');
+
+            } else if (p.isSpecialMeat) {
+                // Use packPrice as the display price for meat
+                baseProduct.price = p.packPrice;
+            }
+
+            // Fallback for price property to prevent toFixed() crash
+            if (typeof baseProduct.price !== 'number' || isNaN(baseProduct.price)) {
+                baseProduct.price = 0.00;
+            }
+            
+            return baseProduct;
+        });
+    }
+
+    // 2. Render Products
+    function renderProducts(products) {
+        productGrid.innerHTML = products.map((product, index) => {
+            
+            const priceText = product.isWeighable && !product.isSpecialMeat
+                ? 'يحدد لاحقاً' 
+                : product.isVariantSet 
+                    ? 'يبدأ من ' + product.price.toFixed(2) + ' د' 
+                    : product.price.toFixed(2) + ' د';
+            
+            // Use baseProduct.img now
+            const img = product.img; 
+
+            // data-index here refers to the index in the *filtered* list.
+            return `<div class="product-card" data-name="${product.name}" data-index="${index}"><img src="${img}" alt="${product.name}"><div class="card-details"><h3>${product.name}</h3><p>${priceText}</p></div></div>`;
+        }).join('');
+
+        // Attach click event listeners to open modal
+        document.querySelectorAll('.product-card').forEach((card, index) => {
+            // Must pass the ORIGINAL item from the filtered list (products) to the modal
+            card.addEventListener('click', () => openModal(products[index]));
+        });
+    }
+
+    // 3. Update Cart Count and Storage
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cartCountSpan.textContent = cart.length;
+    }
+
+    function saveCart(newCart) {
+        localStorage.setItem('cart', JSON.stringify(newCart));
+        updateCartCount();
+    }
+
+    // Helper: Find the original product object from the master list
+    function findOriginalProduct(productName) {
+        // Simple name comparison works because variant names are derived from the base name
+        const baseName = productName.split(' (')[0].trim();
+        return originalProducts.find(p => p.name.trim() === baseName || (p.variants && p.name.trim() === baseName));
+    }
+
+
+    // 4. Open Product Modal
+    function openModal(product) {
+        currentItem = product;
+        
+        // Find the ORIGINAL product structure (important for variants and special meat)
+        const originalProduct = originalProducts.find(p => p.name === currentItem.name);
+        
+        // If it's a variant display, find the base product
+        if (!originalProduct) {
+             const baseName = currentItem.name.split(' (')[0].trim();
+             const tempOriginal = originalProducts.find(p => p.name.trim() === baseName);
+             if (tempOriginal && tempOriginal.variants) {
+                 // Use the base product for logic, but keep the card's data for name/price display
+                 currentItem = { ...tempOriginal, tempBaseName: currentItem.name };
+             } else {
+                 currentItem = originalProducts.find(p => p.name === currentItem.name) || currentItem;
+             }
+        }
+
+
+        // Reset UI elements
+        modalName.textContent = currentItem.name;
+        modalDesc.textContent = currentItem.desc;
+        modalPrep.textContent = 'مدة التجهيز: ' + currentItem.prep;
+        modalQty.value = 1;
+
+        variantSelectContainer.classList.add('hidden');
+        weighableInfo.classList.add('hidden');
+        qtyInputContainer.classList.remove('hidden');
+        specialMeatOptions.classList.add('hidden');
+
+        if (currentItem.variants && currentItem.variants.length > 0) {
+            variantSelectContainer.classList.remove('hidden');
+            
+            // Populate selector with ALL variants
+            modalVariantSelect.innerHTML = currentItem.variants.map((v, i) => 
+                `<option value="${i}">${v.size} - ${v.price.toFixed(2)} د</option>`
+            ).join('');
+            
+            // Set initial modal data based on selected variant (or first one)
+            modalVariantSelect.value = 0; // Select the first variant by default
+            const initialVariant = currentItem.variants[0];
+            modalPrice.textContent = `السعر: ${initialVariant.price.toFixed(2)} د`;
+            modalQty.min = 1;
+            modalQty.step = 1;
+            modalQty.value = 1;
+            modalQtyUnit.textContent = initialVariant.unit;
+            modalImg.src = initialVariant.img;
+
+        } else if (currentItem.isSpecialMeat) {
+            specialMeatOptions.classList.remove('hidden');
+            qtyInputContainer.classList.add('hidden');
+            
+            // Reset meat options
+            meatOrderType.value = 'pack';
+            meatValue.value = 1;
+            meatAmountInput.classList.add('hidden');
+            addonOnion.checked = false;
+            addonParsley.checked = false;
+            updateMeatPriceDisplay();
+            
+            modalImg.src = currentItem.img;
+
+        } else if (currentItem.isWeighable) {
+            weighableInfo.classList.remove('hidden');
+            modalPrice.textContent = `السعر: ${currentItem.price.toFixed(2)} د / ${currentItem.unit} (يحدد بعد الوزن)`;
+            modalQty.min = currentItem.isPerKg ? 0.05 : 0.5;
+            modalQty.step = currentItem.isPerKg ? 0.05 : 0.5;
+            modalQty.value = currentItem.isPerKg ? 0.5 : 1;
+            modalQtyUnit.textContent = currentItem.unit;
+            modalImg.src = currentItem.img;
+
+        } else {
+            // Regular Product
+            modalPrice.textContent = `السعر: ${currentItem.price.toFixed(2)} د`;
+            modalQty.min = 1;
+            modalQty.step = 1;
+            modalQty.value = 1;
+            modalQtyUnit.textContent = currentItem.unit;
+            modalImg.src = currentItem.img;
+        }
+
+        modal.classList.add('active');
+    }
+
+    // 5. Handle Variant Change 
+    function handleVariantChange() {
+    // Find the full product object from the master list (originalProducts)
+    const fullProduct = originalProducts.find(p => p.name === currentItem.name);
+    if (!fullProduct || !fullProduct.variants) return;
+
+    const selectedIndex = modalVariantSelect.value;
+    const variant = fullProduct.variants[selectedIndex];
+    
+    modalPrice.textContent = `السعر: ${variant.price.toFixed(2)} د`;
+    modalQtyUnit.textContent = variant.unit;
+    modalImg.src = variant.img;
+    
+    // ✅ تحديث الوصف أيضًا
+    modalDesc.textContent = variant.desc;
+}
+
+
+    // 6. Update Meat Price Display
+    function updateMeatPriceDisplay() {
+        const orderType = meatOrderType.value;
+        meatAmountInput.classList.add('hidden');
+        let finalPrice = 0;
+
+        // Get the real meat product data from originalProducts (using the name 'لحم عجل')
+        const meatProduct = originalProducts.find(p => p.isSpecialMeat && p.name === 'لحم عجل');
+        if (!meatProduct) return;
+
+        if (orderType === 'pack') {
+            finalPrice = meatProduct.packPrice;
+        } else if (orderType === 'amount') {
+            meatAmountInput.classList.remove('hidden');
+            const meatValueAmount = parseFloat(meatValue.value) || 0;
+            finalPrice = meatValueAmount;
+        }
+
+        const onionPrice = addonOnion.checked ? parseFloat(addonOnion.dataset.price) : 0;
+        const parsleyPrice = addonParsley.checked ? parseFloat(addonParsley.dataset.price) : 0;
+
+        finalPrice += onionPrice + parsleyPrice;
+
+        meatFinalPriceValue.textContent = finalPrice.toFixed(2);
+    }
+
+    // 7. Get Meat Item Details for Cart
+    function getMeatItemDetails() {
+        const meatProduct = originalProducts.find(p => p.isSpecialMeat && p.name === 'لحم عجل');
+        const orderType = meatOrderType.value;
+        const grindType = meatGrindType.value;
+        
+        let finalPrice = 0;
+        let meatValueAmount = 0;
+
+        if (orderType === 'pack') {
+            finalPrice = meatProduct.packPrice;
+        } else if (orderType === 'amount') {
+            meatValueAmount = parseFloat(meatValue.value) || 0;
+            finalPrice = meatValueAmount;
+        }
+
+        const addons = [];
+        const onionPrice = addonOnion.checked ? parseFloat(addonOnion.dataset.price) : 0;
+        const parsleyPrice = addonParsley.checked ? parseFloat(addonParsley.dataset.price) : 0;
+
+        if (addonOnion.checked) addons.push('بصل');
+        if (addonParsley.checked) addons.push('بقدونس');
+        
+        finalPrice += onionPrice + parsleyPrice;
+
+        const item = {
+            id: Date.now(),
+            ...meatProduct,
+            name: `${meatProduct.name} (طلب خاص)`,
+            orderType,
+            meatValue: meatValueAmount,
+            grindType,
+            addons,
+            price: finalPrice, // Use price instead of finalPrice for cart structure
+            qty: 1, // Quantity is always 1 for this complex item
+            unit: 'طلب'
+        };
+        return item;
+    }
+
+
+    // Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+        productsForRendering = prepareProductsForRendering(originalProducts);
+        renderProducts(productsForRendering);
+        updateCartCount();
+    });
+
+    // Event Listener for Adding to Cart
+    addCartBtn.addEventListener('click', () => {
+        if (!currentItem) return;
+
+        let item = { ...currentItem };
+        // Use the original product data structure for cart logic (important for variants)
+        const baseProduct = originalProducts.find(p => p.name === currentItem.name) || currentItem;
+
+
+        if (baseProduct.isSpecialMeat) {
+            item = getMeatItemDetails();
+            
+        } else if (baseProduct.variants && baseProduct.variants.length > 0) {
+            const selectedIndex = modalVariantSelect.value;
+            const variant = baseProduct.variants[selectedIndex];
+
+            item = {
+                id: Date.now(),
+                ...baseProduct,
+                name: `${baseProduct.name} (${variant.size})`,
+                price: variant.price,
+                unit: variant.unit,
+                desc: variant.desc,
+                img: variant.img,
+                prep: variant.prep,
+                variant: variant,
+                qty: parseFloat(modalQty.value)
+            };
+            if (item.qty <= 0) {
+                alert("الرجاء إدخال كمية صحيحة.");
+                return;
+            }
+
+        } else {
+            item = {
+                id: Date.now(),
+                ...baseProduct,
+                qty: parseFloat(modalQty.value)
+            };
+
+            if (item.qty <= 0) {
+                alert("الرجاء إدخال كمية صحيحة.");
+                return;
+            }
+        }
+        
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.push(item);
+        saveCart(cart);
+        
+        modal.classList.remove('active');
+    });
+
+
+    // Event Listeners
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('active');
+        }
+    });
+
+    closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
+    modalVariantSelect.addEventListener('change', handleVariantChange);
+
+    // Event Listeners for Special Meat
+    meatOrderType.addEventListener('change', updateMeatPriceDisplay);
+    meatValue.addEventListener('input', updateMeatPriceDisplay);
+    addonOnion.addEventListener('change', updateMeatPriceDisplay);
+    addonParsley.addEventListener('change', updateMeatPriceDisplay);
+
+    // Search functionality
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        // Filter the prepared list (productsForRendering)
+        const filteredProducts = productsForRendering.filter(p => 
+            p.name.toLowerCase().includes(searchTerm) || 
+            (p.desc && p.desc.toLowerCase().includes(searchTerm))
+        );
+        
+        // Render the filtered list
+        renderProducts(filteredProducts);
+    });
+
+</script>
+</body>
+</html> 
