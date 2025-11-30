@@ -11,6 +11,6 @@
 - واجهة مستخدم نظيفة (Frontend + Backend)  
 
 ## 🧰 التقنيات المستخدمة (Tech Stack)
-- Frontend: React (+ أي UI Library استعملتها)  
+- Frontend: React   
 - Backend: Node.js + Express  
-- قاعدة البيانات: MongoDB (أو أي DB أنت مستخدمها)  
+- قاعدة البيانات: MongoDB  
